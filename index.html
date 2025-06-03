@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+<body>
+  <div>
+    <ul>
+      <li>
+        <span>Lab 7</span>
+        <button class="ymlbutton">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-copy"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
+            />
+          </svg>
+          yml
+        </button>
+          <button class="localbutton">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-copy"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
+            />
+          </svg>
+          localhost.ini
+        </button>
+        <span class="copied-yml" style="display:none; color: green; margin-left: 10px;">YML Copied!</span>
+         <span class="copied-local" style="display:none; color: green; margin-left: 10px;">localhosts.ini Copied!</span>
+
+      </li>
+    </ul>
+  </div>
+</body>
+
+<script>
+  const ymlbutton = document.querySelector(".ymlbutton");
+  const copiedMsg = document.querySelector(".copied-yml");
+
+ const localbutton = document.querySelector(".localbutton");
+  const copiedymlMsg = document.querySelector(".copied-local");
+
+  ymlbutton.addEventListener("click", () => {
+    navigator.clipboard.writeText(`---
+- name: Configure Nginx Web Server
+  hosts: local
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Ensure Nginx service is running and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: Reload Nginx # Preferred for config changes
+      service:
+        name: nginx
+        state: reloaded
+    - name: Restart Nginx # Alternative if reload isn't sufficient or desired
+      service:
+        name: nginx
+        state: restarted
+
+`);
+    
+    // Show 'Copied!' message
+    copiedMsg.style.display = "inline";
+    
+    // Hide after 1.5 seconds
+    setTimeout(() => {
+      copiedMsg.style.display = "none";
+    }, 1500);
+  });
+
+  //////////////////////////////
+
+  localbutton.addEventListener("click", () => {
+    navigator.clipboard.writeText(`[local]
+localhost ansible_connection=local`);
+    
+    // Show 'Copied!' message
+    copiedymlMsg.style.display = "inline";
+    
+    // Hide after 1.5 seconds
+    setTimeout(() => {
+      copiedymlMsg.style.display = "none";
+    }, 1500);
+  });
+</script>
+
+
+
+</html>
